@@ -1,4 +1,4 @@
-FROM genee/mairadb:latest
+FROM mariadb/server:10.3
 
 COPY ./mha4mysql-node-0.58.tar.gz /tmp/
 
@@ -12,7 +12,4 @@ RUN build_deps='ssh sshpass perl libdbi-perl libmodule-install-perl libdbd-mysql
     && make install \
     && cd /opt \
     && rm -rf /opt/mha4mysql-* \
-    && apt-get clean \
-    && echo 'export PATH="/app/bin:$PATH"' > /etc/profile.d/docker
-
-ENV PATH=/app/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    && apt-get clean 
