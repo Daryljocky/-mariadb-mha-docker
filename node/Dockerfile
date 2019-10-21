@@ -15,6 +15,9 @@ RUN build_deps='ssh sshpass perl libdbi-perl libmodule-install-perl libdbd-mysql
     && make install \
     && cd /opt \
     && rm -rf /opt/mha4mysql-* \
+    && chmod +x /usr/local/bin/docker-entrypoint.sh \
+    && chmod +x /usr/local/bin/sshinit.sh \
+    && chmod +x /usr/local/bin/sshauth.sh \
     && apt-get clean 
 
 EXPOSE 22
