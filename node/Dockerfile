@@ -14,3 +14,5 @@ RUN build_deps='ssh sshpass perl libdbi-perl libmodule-install-perl libdbd-mysql
     && cd /opt \
     && rm -rf /opt/mha4mysql-* \
     && apt-get clean 
+
+EXPOSE 22
