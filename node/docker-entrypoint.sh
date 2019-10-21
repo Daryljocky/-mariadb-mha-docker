@@ -175,6 +175,8 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		if [ "$MARIADB_USER" -a "$MARIADB_PASSWORD" ]; then
 			echo "CREATE USER '$MARIADB_USER'@'%' IDENTIFIED BY '$MARIADB_PASSWORD' ;" | "${mysql[@]}"
             echo "GRANT ALL PRIVILEGES ON *.* TO '$MARIADB_USER'@'%' WITH GRANT OPTION;" | "${mysql[@]}"
+            echo "GRANT REPLICATION SLAVE ON *.* TO 'geneeslave'@'172.17.42.%' IDENTIFIED BY 'Genee83719730';" | "${mysql[@]}"
+            echo "reset master;"| "${mysql[@]}"
 #			if [ "$MARIADB_DATABASE" ]; then
 #				echo "GRANT ALL ON \`$MARIADB_DATABASE\`.* TO '$MARIADB_USER'@'%' ;" | "${mysql[@]}"
 #			fi
