@@ -181,7 +181,7 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 #			if [ "$MARIADB_DATABASE" ]; then
 #				echo "GRANT ALL ON \`$MARIADB_DATABASE\`.* TO '$MARIADB_USER'@'%' ;" | "${mysql[@]}"
 #			fi
-#		fi
+		fi
 
 		echo
 		for f in /docker-entrypoint-initdb.d/*; do
