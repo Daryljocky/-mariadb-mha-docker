@@ -1,5 +1,6 @@
 FROM mariadb/server:10.3
 
+COPY docker-entrypoint.sh /usr/local/bin/
 COPY ./mha4mysql-node-0.58.tar.gz /tmp/
 
 RUN build_deps='ssh sshpass perl libdbi-perl libmodule-install-perl libdbd-mysql-perl make' \
