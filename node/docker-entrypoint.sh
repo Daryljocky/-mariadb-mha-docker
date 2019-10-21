@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eo pipefail
 shopt -s nullglob
-service ssh start
 chmod -R 600 /root/.ssh
+service ssh start
 
 # if command starts with an option, prepend mysqld
 if [ "${1:0:1}" = '-' ]; then
