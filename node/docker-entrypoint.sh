@@ -1,7 +1,6 @@
 #!/bin/bash
 set -eo pipefail
 shopt -s nullglob
-#chmod -R 600 /root/.ssh
 service ssh start
 
 # if command starts with an option, prepend mysqld
@@ -82,7 +81,7 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 	if [ ! -d "$DATADIR/mysql" ]; then
 		# for backward compability support both MYSQL_ and MARIADB_ env vars
 		file_env 'MYSQL_ROOT_PASSWORD'
-	  file_env 'MARIADB_ROOT_PASSWORD'
+		file_env 'MARIADB_ROOT_PASSWORD'
 		MARIADB_ROOT_PASSWORD="${MARIADB_ROOT_PASSWORD:-$MYSQL_ROOT_PASSWORD}"
 		MARIADB_ALLOW_EMPTY_PASSWORD="${MARIADB_ALLOW_EMPTY_PASSWORD:-$MYSQL_ALLOW_EMPTY_PASSWORD}"
 		MARIADB_RANDOM_ROOT_PASSWORD="${MARIADB_RANDOM_ROOT_PASSWORD:-$MYSQL_RANDOM_ROOT_PASSWORD}"
@@ -175,9 +174,10 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		MARIADB_PASSWORD="${MARIADB_PASSWORD:-$MYSQL_PASSWORD}"
 		if [ "$MARIADB_USER" -a "$MARIADB_PASSWORD" ]; then
 			echo "CREATE USER '$MARIADB_USER'@'%' IDENTIFIED BY '$MARIADB_PASSWORD' ;" | "${mysql[@]}"
-			echo "GRANT ALL PRIVILEGES ON *.* TO '$MARIADB_USER'@'%' WITH GRANT OPTION;" | "${mysql[@]}"
-			echo "GRANT REPLICATION SLAVE ON *.* TO 'geneeslave'@'172.17.42.%' IDENTIFIED BY 'Genee83719730';" | "${mysql[@]}"
-			echo "reset master;"| "${mysql[@]}"
+			echo "GRANT ALL PRIVILEGES ON *.* TO '$MARIADB_USER'@'%' WITH GRANT OPTION ;" | "${mysql[@]}"
+			echo "CREATE USER 'geneeslave'@'172.17.42.%' IDENTIFIED BY 'Genee83719730' ;" | "${mysql[@]}"
+			echo "GRANT REPLICATION SLAVE ON *.* TO 'geneeslave'@'172.17.42.%' IDENTIFIED BY 'Genee83719730' ;" | "${mysql[@]}"
+			echo "reset master ;" | "${mysql[@]}"
 #			if [ "$MARIADB_DATABASE" ]; then
 #				echo "GRANT ALL ON \`$MARIADB_DATABASE\`.* TO '$MARIADB_USER'@'%' ;" | "${mysql[@]}"
 #			fi
