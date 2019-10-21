@@ -45,8 +45,10 @@ _check_config() {
 	toRun=( "$@" --verbose --help --log-bin-index="$(mktemp -u)" )
 	if ! errors="$("${toRun[@]}" 2>&1 >/dev/null)"; then
 		cat >&2 <<-EOM
+
 			ERROR: mysqld failed while attempting to check config
 			command was: "${toRun[*]}"
+
 			$errors
 		EOM
 		exit 1
@@ -120,12 +122,8 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		fi
 
 		if [ ! -z "$MARIADB_RANDOM_ROOT_PASSWORD" ]; then
-            # we have to filter characters like ' and \ that will terminate the sql query or don't count
-            # as special characters to keep the enterprise server password policy in mind.
-            MARIADB_ROOT_PASSWORD="'"
-            while [[ $MARIADB_ROOT_PASSWORD == *"'"* ]] || [[ $MARIADB_ROOT_PASSWORD == *"\\"* ]]; do
-                export MARIADB_ROOT_PASSWORD="$(pwgen -1 32 -y)"
-            done
+			export MARIADB_ROOT_PASSWORD="$(pwgen -1 32)"
+			echo "GENERATED ROOT PASSWORD: $MARIADB_ROOT_PASSWORD"
 		fi
 
 
@@ -147,6 +145,7 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 			-- What's done in this file shouldn't be replicated
 			--  or products like mysql-fabric won't work
 			SET @@SESSION.SQL_LOG_BIN=0;
+
 			DELETE FROM mysql.user WHERE user NOT IN ('mysql.sys', 'mysqlxsys', 'root') OR host NOT IN ('localhost') ;
 			SET PASSWORD FOR 'root'@'localhost'=PASSWORD('${MARIADB_ROOT_PASSWORD}') ;
 			GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION ;
@@ -159,13 +158,13 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 			mysql+=( -p"${MARIADB_ROOT_PASSWORD}" )
 		fi
 
-#		file_env 'MYSQL_DATABASE'
-#		file_env 'MARIADB_DATABASE'
-#		MARIADB_DATABASE="${MARIADB_DATABASE:-$MYSQL_DATABASE}"
-#		if [ "$MARIADB_DATABASE" ]; then
-#			echo "CREATE DATABASE IF NOT EXISTS \`$MARIADB_DATABASE\` ;" | "${mysql[@]}"
-#			mysql+=( "$MARIADB_DATABASE" )
-#		fi
+	#	file_env 'MYSQL_DATABASE'
+	#	file_env 'MARIADB_DATABASE'
+	#	MARIADB_DATABASE="${MARIADB_DATABASE:-$MYSQL_DATABASE}"
+	#	if [ "$MARIADB_DATABASE" ]; then
+	#		echo "CREATE DATABASE IF NOT EXISTS \`$MARIADB_DATABASE\` ;" | "${mysql[@]}"
+	#		mysql+=( "$MARIADB_DATABASE" )
+	#	fi
 
 		file_env 'MYSQL_USER'
 		file_env 'MARIADB_USER'
@@ -179,7 +178,6 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 			echo "CREATE USER 'geneeslave'@'172.17.42.%' IDENTIFIED BY 'Genee83719730' ;" | "${mysql[@]}"
 			echo "GRANT REPLICATION SLAVE ON *.* TO 'geneeslave'@'172.17.42.%' IDENTIFIED BY 'Genee83719730' ;" | "${mysql[@]}"
 			echo "reset master ;" | "${mysql[@]}"
-
 #			if [ "$MARIADB_DATABASE" ]; then
 #				echo "GRANT ALL ON \`$MARIADB_DATABASE\`.* TO '$MARIADB_USER'@'%' ;" | "${mysql[@]}"
 #			fi
