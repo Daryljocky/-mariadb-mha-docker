@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 shopt -s nullglob
-chmod -R 600 /root/.ssh
+#chmod -R 600 /root/.ssh
 service ssh start
 
 # if command starts with an option, prepend mysqld
