@@ -2,6 +2,8 @@ FROM debian:jessie
 
 COPY ./mha4mysql-manager-0.58.tar.gz /tmp/
 COPY ./mha4mysql-node-0.58.tar.gz /tmp/
+COPY sshinit.sh /usr/local/bin/
+COPY sshauth.sh /usr/local/bin/
 
 RUN build_deps='ssh sshpass perl libdbi-perl libmodule-install-perl libdbd-mysql-perl libconfig-tiny-perl liblog-dispatch-perl libparallel-forkmanager-perl make inetutils-ping' \
     && apt-get update \
@@ -18,4 +20,6 @@ RUN build_deps='ssh sshpass perl libdbi-perl libmodule-install-perl libdbd-mysql
     && make install \
     && cd /opt \
     && rm -rf /opt/mha4mysql-* \
+    && chmod +x /usr/local/bin/sshinit.sh \
+    && chmod +x /usr/local/bin/sshauth.sh \
     && apt-get clean
