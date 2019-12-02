@@ -1,4 +1,4 @@
-FROM mariadb/server:10.3
+FROM mariadb/server:10.1.36
 
 COPY docker-entrypoint.sh /usr/local/bin/
 COPY sshinit.sh /usr/local/bin/
