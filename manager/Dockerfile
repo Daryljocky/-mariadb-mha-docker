@@ -1,6 +1,7 @@
 FROM debian:jessie
 
 COPY ./mha4mysql-manager.tar.gz /tmp/
+COPY ./mha-start.sh /usr/local/bin/
 COPY ./mha4mysql-node.tar.gz /tmp/
 COPY sshinit.sh /usr/local/bin/
 COPY sshauth.sh /usr/local/bin/
@@ -22,4 +23,5 @@ RUN build_deps='ssh sshpass perl libdbi-perl libmodule-install-perl libdbd-mysql
     && rm -rf /opt/mha4mysql-* \
     && chmod +x /usr/local/bin/sshinit.sh \
     && chmod +x /usr/local/bin/sshauth.sh \
+    && chmod +x /usr/local/bin/mha-start.sh \
     && apt-get clean
